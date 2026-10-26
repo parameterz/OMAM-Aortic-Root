@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Adult aortic annulus, sinus and ascending aorta z-scores and normal ranges from the CITED I OMAM equations.">
+<title>OMAM Aortic Root Z-Scores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a two-pane clinical worksheet. Patient inputs on the left, a per-site report on the right
+   with each measurement placed on a z-scale strip against the paper's reference band. */
+:root{
+  --bg:#f3f5f7; --panel:#ffffff; --ink:#152330; --muted:#5a6b78; --line:#d9e0e6; --soft:#e9eef2;
+  --accent:#1f5f7a; --accent-ink:#ffffff; --band:#cfe3ea; --band-edge:#8fb9c8;
+  --ok:#2f7a4f; --ok-bg:#e1f1e7; --warn:#9a6a00; --warn-bg:#fbf0d4; --bad:#b03a2e; --bad-bg:#f8e1de;
+  --marker:#152330;
+  --f-display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-data:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f171d; --panel:#16212a; --ink:#e3ebf0; --muted:#97a8b4; --line:#2a3945; --soft:#1d2a34;
+  --accent:#6fb3cc; --accent-ink:#0f171d; --band:#1f3e4b; --band-edge:#3f7385;
+  --ok:#7fcf9c; --ok-bg:#1a3326; --warn:#e8c25e; --warn-bg:#3a2f12; --bad:#f08c80; --bad-bg:#3d1f1b;
+  --marker:#f2f6f8; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#0f171d; --panel:#16212a; --ink:#e3ebf0; --muted:#97a8b4; --line:#2a3945; --soft:#1d2a34;
+  --accent:#6fb3cc; --accent-ink:#0f171d; --band:#1f3e4b; --band-edge:#3f7385;
+  --ok:#7fcf9c; --ok-bg:#1a3326; --warn:#e8c25e; --warn-bg:#3a2f12; --bad:#f08c80; --bad-bg:#3d1f1b;
+  --marker:#f2f6f8; color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:grid;gap:22px}
+header h1{font-family:var(--f-display);font-weight:650;font-size:clamp(1.6rem,3.2vw,2.2rem);line-height:1.15;margin:0;text-wrap:balance}
+header p{margin:6px 0 0;color:var(--muted);max-width:68ch}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+
+.grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;min-width:0}
+.panel h2{font-family:var(--f-display);font-weight:650;font-size:1.15rem;margin:0 0 14px}
+
+form{display:grid;gap:16px}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:6px}
+legend,label.lab{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:0;margin-bottom:6px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{flex:1;text-align:center;padding:8px 6px;cursor:pointer;font-weight:600;font-size:.9rem;color:var(--muted);border-left:1px solid var(--line)}
+.seg label:first-of-type{border-left:0}
+.seg input:checked + label{background:var(--accent);color:var(--accent-ink)}
+.seg input:focus-visible + label{outline:2px solid var(--accent);outline-offset:-3px}
+.row2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.field{display:grid;gap:4px;min-width:0}
+.field span{font-size:.78rem;color:var(--muted);font-weight:600}
+.field input{width:100%;font:inherit;font-family:var(--f-data);font-size:.95rem;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+.field input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.hint{font-size:.8rem;color:var(--muted);margin:0}
+.derived{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--f-data);font-size:.82rem;color:var(--muted)}
+.derived b{color:var(--ink);font-weight:600}
+.note-ex{font-size:.78rem;color:var(--warn);background:var(--warn-bg);padding:6px 10px;border-radius:6px;margin:0}
+
+.alerts{display:grid;gap:8px}
+.alert{font-size:.86rem;padding:9px 12px;border-radius:7px;background:var(--warn-bg);color:var(--ink);border-left:3px solid var(--warn)}
+
+.site{display:grid;gap:10px;padding-block:16px;border-top:1px solid var(--line)}
+.site:first-of-type{border-top:0;padding-top:4px}
+.site-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.site-head h3{margin:0;font-size:1rem;font-weight:700}
+.site-head h3 small{font-weight:500;color:var(--muted);font-size:.82rem;margin-left:6px}
+.pill{font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:999px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)} .pill.none{background:var(--soft);color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{min-width:0}
+.stat .k{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.stat .v{font-family:var(--f-data);font-variant-numeric:tabular-nums;font-size:1.05rem;font-weight:600}
+.stat .v small{font-size:.75rem;color:var(--muted);font-weight:400}
+.strip svg{width:100%;height:auto;display:block}
+
+.compare{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:right;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+td{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+td:first-child{font-family:var(--f-body);font-weight:600}
+td.sel{background:var(--soft)}
+.zhi{color:var(--bad);font-weight:600} .zmid{color:var(--warn);font-weight:600}
+
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.notes h3{font-size:.95rem;margin:0 0 6px}
+.notes p,.notes li{font-size:.87rem;color:var(--muted);margin:0 0 8px;max-width:65ch}
+.notes ul{padding-left:18px;margin:0}
+.formula{font-family:var(--f-data);font-size:.82rem;background:var(--soft);padding:8px 10px;border-radius:6px;color:var(--ink);overflow-x:auto}
+a{color:var(--accent)}
+footer{font-size:.8rem;color:var(--muted)}
+
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Adult echocardiography · CITED I reference values</div>
+    <h1>OMAM Aortic Root Z-Scores</h1>
+    <p>Enter a patient and their aortic root measurements. The page returns the expected diameter, the normal range in millimetres for that patient, a z-score, and a flag against the reference limits published by Yao et al. (MedComm 2026).</p>
+  </header>
+
+  <div class="grid">
+    <section class="panel" aria-labelledby="in-h">
+      <h2 id="in-h">Patient</h2>
+      <form id="f" novalidate>
+        <fieldset>
+          <legend>Reference cohort</legend>
+          <div class="seg">
+            <input type="radio" name="pop" id="pop-it" value="italian" checked><label for="pop-it">Italian</label>
+            <input type="radio" name="pop" id="pop-cn" value="chinese"><label for="pop-cn">Chinese</label>
+            <input type="radio" name="pop" id="pop-co" value="combined"><label for="pop-co">Combined</label>
+          </div>
+          <p class="hint">Pick the cohort closest to your patient. The table below shows the z-score under all three.</p>
+        </fieldset>
+        <fieldset>
+          <legend>Sex</legend>
+          <div class="seg">
+            <input type="radio" name="sex" id="sex-m" value="male" checked><label for="sex-m">Male</label>
+            <input type="radio" name="sex" id="sex-f" value="female"><label for="sex-f">Female</label>
+          </div>
+        </fieldset>
+        <div class="row2">
+          <label class="field"><span>Age (y)</span><input id="age" inputmode="decimal" value="61"></label>
+          <label class="field"><span>Height (cm)</span><input id="ht" inputmode="decimal" value="177"></label>
+          <label class="field"><span>Weight (kg)</span><input id="wt" inputmode="decimal" value="77"></label>
+        </div>
+        <div class="derived" id="derived"></div>
+        <fieldset>
+          <legend>Measured diameters (mm)</legend>
+          <div class="row2">
+            <label class="field"><span>Annulus</span><input id="m-aoa" inputmode="decimal" value="25"></label>
+            <label class="field"><span>Sinuses</span><input id="m-aos" inputmode="decimal" value="38"></label>
+            <label class="field"><span>Asc. aorta</span><input id="m-aoasc" inputmode="decimal" value="38"></label>
+          </div>
+          <p class="hint">Leave a site blank to see only its expected normal range. Leading edge to leading edge, end-diastole, parasternal long axis.</p>
+        </fieldset>
+        <p class="note-ex" id="example-note">Example patient loaded. Replace with your own values.</p>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="out-h">
+      <h2 id="out-h">Report</h2>
+      <div class="alerts" id="alerts"></div>
+      <div id="sites"></div>
+      <div class="compare">
+        <h2 style="margin-top:18px">Z-score under each cohort</h2>
+        <table id="cmp" aria-describedby="cmp-note"></table>
+        <p class="hint" id="cmp-note" style="margin-top:8px">Same patient, three reference models. Differences show how much the cohort choice matters.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel notes" aria-label="Method and caveats">
+    <div>
+      <h3>How the numbers are made</h3>
+      <p>Each cohort has its own fitted equation for the expected diameter. Terms that dropped out in stepwise selection are absent.</p>
+      <div class="formula">Yp = a × b<sup>female</sup> × age<sup>x</sup> × height<sup>y</sup> × weight<sup>z</sup><br>Yc = measured ÷ Yp<br>z = (Yc − mean) ÷ SD</div>
+      <p style="margin-top:8px">Yc is a percent-predicted value: 1.15 means 15% larger than expected. The normal range in millimetres is Yp multiplied by the published lower and upper limits.</p>
+    </div>
+    <div>
+      <h3>Reference limits</h3>
+      <ul>
+        <li>Chinese and Italian: mean, SD and 95% limits of the corrected value from Table 5 (n = 910 each). The flag uses those limits, as the authors recommend.</li>
+        <li>Combined: the paper gives no reference values. This page uses the sex-specific validation-group mean and SD from Table 4, with limits at ±1.96 SD. Treat it as provisional.</li>
+        <li>"High-normal" and "low-normal" mean inside the published limits but beyond the 95th or 5th percentile. That label is this page's addition.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Where it does not apply</h3>
+      <ul>
+        <li>Derived in healthy, normotensive, non-obese adults aged 18 to 79 (BMI under 30). No athletes, no pregnancy.</li>
+        <li>Age is in every equation, so age-related widening is treated as normal. Fixed or height-only cutoffs will read older patients more strictly.</li>
+        <li>The annulus was measured leading edge to leading edge at end-diastole, not inner edge in mid-systole.</li>
+        <li>Only Han Chinese and Italian subjects were studied. Other populations are an extrapolation.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    Source: Yao G, Hu X, Chen X, et al. Comparison of body surface area and optimized multivariate allometric model approaches in correcting echocardiographic aortic dimensions for physiological variances (CITED I). <i>MedComm</i> 2026;7(6):e70788. <a href="https://doi.org/10.1002/mco2.70788" target="_blank" rel="noopener">doi:10.1002/mco2.70788</a>. Coefficients checked against the authors' published calculator. For research and education; it does not replace clinical judgement.
+  </footer>
+</div>
+
+<script>
+/* ---- core: pure functions ---- */
+const OMAM = {
+  sites: [
+    {key:"aoa",  name:"Aortic annulus", abbr:"Ao-a"},
+    {key:"aos",  name:"Sinuses of Valsalva", abbr:"Ao-s"},
+    {key:"aoasc",name:"Proximal ascending aorta", abbr:"Ao-asc"}
+  ],
+  pops: {italian:"Italian", chinese:"Chinese", combined:"Combined"},
+  models: {
+    chinese:{ aoa:{a:9.593,b:0.943,x:0.054,y:0,z:0.142}, aos:{a:8.085,b:0.949,x:0.113,y:0,z:0.210}, aoasc:{a:5.028,b:0.966,x:0.161,y:0,z:0.261} },
+    italian:{ aoa:{a:1.042,b:0.944,x:0.054,y:0.472,z:0.081}, aos:{a:2.268,b:0.925,x:0.164,y:0.317,z:0.090}, aoasc:{a:6.385,b:0.956,x:0.204,y:0,z:0.175} },
+    combined:{ aoa:{a:2.948,b:0.928,x:0.060,y:0.338,z:0}, aos:{a:2.689,b:0.950,x:0.137,y:0.210,z:0.198}, aoasc:{a:4.375,b:0.974,x:0.180,y:0,z:0.280} }
+  },
+  /* Table 5 (Chinese, Italian); Table 4 group B by sex (Combined) */
+  refs: {
+    chinese:{ aoa:{mean:1.002,sd:0.112,lo:0.794,hi:1.246}, aos:{mean:1.003,sd:0.105,lo:0.792,hi:1.213}, aoasc:{mean:1.006,sd:0.122,lo:0.747,hi:1.262} },
+    italian:{ aoa:{mean:1.007,sd:0.086,lo:0.854,hi:1.188}, aos:{mean:1.004,sd:0.090,lo:0.834,hi:1.185}, aoasc:{mean:1.006,sd:0.099,lo:0.802,hi:1.195} },
+    combined:{
+      male:{ aoa:{mean:0.996,sd:0.101}, aos:{mean:0.992,sd:0.100}, aoasc:{mean:0.995,sd:0.120} },
+      female:{ aoa:{mean:1.010,sd:0.108}, aos:{mean:1.001,sd:0.109}, aoasc:{mean:1.007,sd:0.114} }
+    }
+  },
+  predict(pop, site, sex, age, ht, wt){
+    const c = this.models[pop][site];
+    return c.a * (sex==="female" ? c.b : 1) * Math.pow(age,c.x) * Math.pow(ht,c.y) * Math.pow(wt,c.z);
+  },
+  ref(pop, site, sex){
+    if(pop==="combined"){ const r=this.refs.combined[sex][site]; return {mean:r.mean, sd:r.sd, lo:r.mean-1.96*r.sd, hi:r.mean+1.96*r.sd, provisional:true}; }
+    return {...this.refs[pop][site], provisional:false};
+  },
+  phi(z){ /* standard normal CDF, Abramowitz-Stegun 26.2.17 */
+    const t=1/(1+0.2316419*Math.abs(z)), d=0.3989422804*Math.exp(-z*z/2);
+    const p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
+    return z>0 ? 1-p : p;
+  },
+  evaluate(pop, site, sex, age, ht, wt, measured){
+    const yp=this.predict(pop,site,sex,age,ht,wt), r=this.ref(pop,site,sex);
+    const out={yp, ref:r, rangeMm:[yp*r.lo, yp*r.hi], yc:null, z:null, pct:null, status:"none"};
+    if(Number.isFinite(measured) && measured>0){
+      out.yc=measured/yp; out.z=(out.yc-r.mean)/r.sd; out.pct=100*this.phi(out.z);
+      if(out.yc>r.hi) out.status="above"; else if(out.yc<r.lo) out.status="below";
+      else if(out.z>=1.645) out.status="highnormal"; else if(out.z<=-1.645) out.status="lownormal";
+      else out.status="normal";
+    }
+    return out;
+  }
+};
+/* ---- end core ---- */
+
+(function(){
+  const $=id=>document.getElementById(id);
+  const num=id=>{const s=$(id).value.trim(); return s===""?NaN:Number(s)};
+  const STATUS={
+    normal:{label:"Normal",cls:"ok"}, highnormal:{label:"High-normal",cls:"warn"}, lownormal:{label:"Low-normal",cls:"warn"},
+    above:{label:"Above normal",cls:"bad"}, below:{label:"Below normal",cls:"bad"}, none:{label:"Not measured",cls:"none"}
+  };
+  const f1=v=>v.toFixed(1), f2=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(2);
+  const pctTxt=p=>p>99.9?">99.9":p<0.1?"<0.1":p.toFixed(p>=99||p<=1?1:0);
+
+  function strip(r){
+    const W=600,H=58,L=14,R=14,min=-4,max=4,sx=v=>L+(Math.max(min,Math.min(max,v))-min)/(max-min)*(W-L-R);
+    const zlo=(r.ref.lo-r.ref.mean)/r.ref.sd, zhi=(r.ref.hi-r.ref.mean)/r.ref.sd;
+    let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${r.z===null?"Reference band only":"z-score "+f2(r.z)+" on a scale from minus 4 to plus 4"}">`;
+    s+=`<rect x="${L}" y="14" width="${W-L-R}" height="16" rx="3" fill="var(--soft)"/>`;
+    s+=`<rect x="${sx(zlo)}" y="14" width="${sx(zhi)-sx(zlo)}" height="16" fill="var(--band)" stroke="var(--band-edge)"/>`;
+    for(let t=min;t<=max;t++){ s+=`<line x1="${sx(t)}" x2="${sx(t)}" y1="30" y2="${t===0?38:35}" stroke="var(--muted)" stroke-width="1"/>`;
+      s+=`<text x="${sx(t)}" y="52" font-size="11" text-anchor="middle" fill="var(--muted)" font-family="var(--f-data)">${t>0?"+"+t:t<0?"−"+(-t):"0"}</text>`; }
+    if(r.z!==null){ const x=sx(r.z), off=Math.abs(r.z)>4;
+      s+=`<line x1="${x}" x2="${x}" y1="8" y2="36" stroke="var(--marker)" stroke-width="3"/>`;
+      s+=`<path d="M${x-6} 4 L${x+6} 4 L${x} 11 Z" fill="var(--marker)"/>`;
+      if(off) s+=`<text x="${r.z>0?x-10:x+10}" y="10" font-size="11" text-anchor="${r.z>0?"end":"start"}" fill="var(--ink)" font-family="var(--f-data)">off scale</text>`; }
+    return s+`</svg>`;
+  }
+
+  function render(){
+    const pop=document.querySelector('input[name=pop]:checked').value;
+    const sex=document.querySelector('input[name=sex]:checked').value;
+    const age=num("age"), ht=num("ht"), wt=num("wt");
+    const alerts=[];
+    const okDemo=[age,ht,wt].every(v=>Number.isFinite(v)&&v>0);
+    let bmi=NaN;
+    if(okDemo){ bmi=wt/Math.pow(ht/100,2); const bsa=0.007184*Math.pow(wt,0.425)*Math.pow(ht,0.725);
+      $("derived").innerHTML=`<span>BMI <b>${bmi.toFixed(1)}</b> kg/m²</span><span>BSA <b>${bsa.toFixed(2)}</b> m² (Du Bois)</span>`;
+      if(age<18||age>79) alerts.push(`Age ${age} is outside the 18 to 79 year range the equations were built on. Results are an extrapolation.`);
+      if(bmi>=30) alerts.push(`BMI ${bmi.toFixed(1)} is 30 or above. Obese subjects were excluded from the reference cohorts.`);
+      if(ht<130||ht>215) alerts.push(`Height ${ht} cm looks unusual. Check the units (centimetres).`);
+      if(wt<30||wt>200) alerts.push(`Weight ${wt} kg looks unusual. Check the units (kilograms).`);
+    } else { $("derived").innerHTML=""; alerts.push("Enter age, height and weight as positive numbers to see results."); }
+    if(pop==="combined") alerts.push("Combined cohort: the paper publishes no reference limits for this model. Limits here are provisional (validation-group mean ± 1.96 SD).");
+    $("alerts").innerHTML=alerts.map(a=>`<div class="alert">${a}</div>`).join("");
+
+    if(!okDemo){ $("sites").innerHTML=""; $("cmp").innerHTML=""; return; }
+    let html="";
+    OMAM.sites.forEach(st=>{
+      const m=num("m-"+st.key), r=OMAM.evaluate(pop,st.key,sex,age,ht,wt,m), S=STATUS[r.status];
+      html+=`<div class="site"><div class="site-head"><h3>${st.name}<small>${st.abbr}</small></h3><span class="pill ${S.cls}">${S.label}</span></div>
+        <div class="stats">
+          <div class="stat"><div class="k">Measured</div><div class="v">${r.yc===null?"—":f1(m)+" <small>mm</small>"}</div></div>
+          <div class="stat"><div class="k">Expected</div><div class="v">${f1(r.yp)} <small>mm</small></div></div>
+          <div class="stat"><div class="k">Normal range</div><div class="v">${f1(r.rangeMm[0])}–${f1(r.rangeMm[1])} <small>mm</small></div></div>
+          <div class="stat"><div class="k">% predicted</div><div class="v">${r.yc===null?"—":Math.round(r.yc*100)+"<small>%</small>"}</div></div>
+          <div class="stat"><div class="k">Z (pctile)</div><div class="v">${r.z===null?"—":f2(r.z)+` <small>${pctTxt(r.pct)}</small>`}</div></div>
+        </div><div class="strip">${strip(r)}</div></div>`;
+    });
+    $("sites").innerHTML=html;
+
+    let t=`<thead><tr><th>Site</th>${Object.keys(OMAM.pops).map(p=>`<th>${OMAM.pops[p]}</th>`).join("")}</tr></thead><tbody>`;
+    OMAM.sites.forEach(st=>{
+      const m=num("m-"+st.key);
+      t+=`<tr><td>${st.abbr}</td>`+Object.keys(OMAM.pops).map(p=>{
+        const r=OMAM.evaluate(p,st.key,sex,age,ht,wt,m);
+        const cls=(p===pop?"sel ":"")+(r.status==="above"||r.status==="below"?"zhi":r.status.endsWith("normal")&&r.status!=="normal"?"zmid":"");
+        return `<td class="${cls}">${r.z===null?"—":f2(r.z)}</td>`;}).join("")+`</tr>`;
+    });
+    $("cmp").innerHTML=t+`</tbody>`;
+  }
+
+  const form=$("f"); let touched=false;
+  form.addEventListener("input",()=>{ if(!touched){touched=true; $("example-note").hidden=true;} render(); });
+  form.addEventListener("change",render);
+  form.addEventListener("submit",e=>e.preventDefault());
+  render();
+})();
+</script>
+</body>
+</html>
