@@ -1,0 +1,11 @@
+{
+  "name": "omam-aortic-root",
+  "private": true,
+  "type": "module",
+  "description": "Z-score calculator for adult aortic root dimensions from the CITED I OMAM equations (Yao et al., MedComm 2026).",
+  "scripts": {
+    "test": "node --test",
+    "serve": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

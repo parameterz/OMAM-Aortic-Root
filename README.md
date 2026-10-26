@@ -1,5 +1,7 @@
 # OMAM Aortic Root Z-Scores
 
+**Live page:** <https://parameterz.github.io/OMAM-Aortic-Root/>
+
 A single-page calculator for adult aortic root dimensions using the optimized multivariate allometric model (OMAM) equations and reference values from the CITED I study:
 
 > Yao G, Hu X, Chen X, et al. Comparison of Body Surface Area and Optimized Multivariate Allometric Model Approaches in Correcting Echocardiographic Aortic Dimensions for Physiological Variances: An International and Multicenter Study (CITED I). *MedComm* 2026;7(6):e70788. [doi:10.1002/mco2.70788](https://doi.org/10.1002/mco2.70788)
@@ -50,6 +52,51 @@ Coefficients match the paper and the authors' published calculator.
 
 For research and education. It does not replace clinical judgement.
 
-## Hosting
+## Features
 
-`index.html` is fully self-contained (Google Fonts is the only external request). Enable GitHub Pages on the `main` branch, root folder, to serve it.
+- Expected diameter, percent of expected, Z-score and percentile for each site.
+- Normal range in millimetres for the patient, on each bar and in the calculation panel.
+- Flags against the published 95% limits: normal, high-/low-normal, above/below normal.
+- Same patient under all three cohorts, side by side.
+- Height in cm or inches and weight in kg or pounds. Values are stored in metric, so switching units never drifts.
+- Step-by-step calculation for any site.
+- **Print report:** a one-page summary with demographics, measured values, normal ranges and Z-scores.
+- **Copy report text:** the same summary as plain text, to paste into an echo report.
+- **Provenance:** reports and copied text record the calculator version, URL, equation source, method, author and generation time.
+
+## Layout
+
+```
+index.html          page markup
+css/styles.css      styles (light and dark)
+js/equations.js     coefficients and reference values as data
+js/zscore.js        pure calculation functions
+js/units.js         unit conversion, BMI and BSA
+js/app.js           UI, printable report and copy-to-text
+js/version.js       version and provenance (footer, report, copied text)
+vendor/rough.esm.js rough.js 4.6.6 (MIT), for the sketched Z-bars
+tests/              node:test checks, including the authors' calculator output
+```
+
+A correction to the equations is a change to `js/equations.js` only.
+
+## Run locally
+
+No build step. ES modules need a local server rather than `file://`:
+
+```sh
+python3 -m http.server 8000     # then open http://localhost:8000/
+npm test                        # Node 18+; no dependencies
+```
+
+## Deploy
+
+GitHub Pages, from the root of `main`.
+
+## Credits
+
+Created by [Dan Dyar, MA, ACS, RDCS, FASE](https://www.linkedin.com/in/dan-dyar-ma-acs-rdcs-ae-pe-fe-fase/). Visual style after [The Heart by Ultrasound](https://intro2echo.com). Sketched figures drawn with [rough.js](https://roughjs.com).
+
+## License
+
+Code: MIT (see `LICENSE`). The equations belong to the cited article; please cite it when using them.
