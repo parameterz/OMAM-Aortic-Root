@@ -6,9 +6,9 @@
 
 /** The three aortic sites. `example` fills the form on first load. */
 export const SITES = [
-  { id: "aoa",   name: "Aortic annulus",           abbr: "Ao-a",   example: 25 },
+  { id: "aoa",   name: "Aortic annulus",           abbr: "Ao-a",   example: 24 },
   { id: "aos",   name: "Sinuses of Valsalva",      abbr: "Ao-s",   example: 38 },
-  { id: "aoasc", name: "Proximal ascending aorta", abbr: "Ao-asc", example: 38 },
+  { id: "aoasc", name: "Proximal ascending aorta", abbr: "Ao-asc", example: 41 },
 ];
 
 /** Reference cohorts. Order is the order of the buttons and comparison tables. */
